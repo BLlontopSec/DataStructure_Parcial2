@@ -96,9 +96,12 @@ java -cp out Main
 ```
 
 Modo archivo (la entrada se toma de un archivo de comandos):
-
 ```
+# cmd, Git Bash, Linux o macOS
 java -cp out Main < pruebas/CasoA.txt
+
+# PowerShell (no admite "<")
+Get-Content pruebas/CasoA.txt | java -cp out Main
 ```
 
 Para ejecutar todos los casos en PowerShell:
