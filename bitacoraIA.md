@@ -30,7 +30,7 @@
 * **Verificación y Corrección realizada por el estudiante:**  
   Al revisar las reglas del examen (específicamente la **Regla f** y las observaciones del Anexo A), identifiqué que la sugerencia de la IA era **incorrecta**. Las reglas establecen que:
   1. Los registros cancelados o atendidos **deben permanecer** en el BST y en el AVL como historial para que la operación `CONSULTAR id` siga funcionando y retorne su estado real.
-  2. La cancelación en el Árbol General solo debe cambiar el estado del atributo `estado` a `"CANCELADO"` en los nodos dependientes que sigan `"PENDIENTE".
+  2. La cancelación en el Árbol General solo debe cambiar el estado del atributo `estado` a `"CANCELADO"` en los nodos dependientes que sigan `"PENDIENTE"`.
   3. El Max-Heap de atención es la única estructura que se reconstruye (`buildHeap`) filtrando los registros pendientes para evitar que las tareas canceladas sean atendidas posteriormente.
 
 * **Comprobación:**  
