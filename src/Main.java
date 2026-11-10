@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Main
@@ -9,10 +11,12 @@ public class Main
         BST bst = new BST();
         AVL avl = new AVL();
         BinaryHeap heap = new BinaryHeap();
-        Scanner scanner = new Scanner(System.in);
+        // Entrada y salida en UTF-8 para evitar problemas de codificacion (BOM, tildes)
+        System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
 
         while (scanner.hasNextLine()) {
-            String linea = scanner.nextLine().trim();
+            String linea = scanner.nextLine().replace("﻿", "").trim();
             if (linea.isEmpty() || linea.startsWith("#")) continue;
 
             String[] partes = linea.split("\\s+");
@@ -30,7 +34,7 @@ public class Main
                         int prioridad = Integer.parseInt(partes[3]);
                         int padre = Integer.parseInt(partes[4]);
 
-                        // Validaciones de errores obligatorias[cite: 8]
+                        // Validaciones de errores obligatorias
                         if (prioridad < 1 || prioridad > 10) {
                             System.out.println("ERROR: prioridad invalida (" + prioridad + ")");
                             break;
@@ -109,6 +113,20 @@ public class Main
                         System.out.println("CANCELADOS: " + canceladosCount);
                         break;
 
+                    case "ELIMINAR":
+                        // Borrado explicito en BST y AVL (Caso E); el historial del resto se conserva
+                        if (partes.length < 2) {
+                            System.out.println("ERROR: falta el ID a eliminar.");
+                            break;
+                        }
+                        int idEliminar = Integer.parseInt(partes[1]);
+                        bst.eliminar(idEliminar);
+                        avl.eliminar(idEliminar);
+                        System.out.println("ELIMINADO de BST y AVL: " + idEliminar +
+                                " (BST lo encuentra: " + (bst.buscar(idEliminar) != null) +
+                                ", AVL lo encuentra: " + (avl.buscar(idEliminar) != null) + ")");
+                        break;
+
                     case "REPORTE":
                         List<Registro> pendientes = obtenerPendientes(arbolGeneral);
                         List<Registro> ordenados = HeapSort.ordenar(pendientes);
@@ -133,6 +151,14 @@ public class Main
                         System.out.println("Hojas: " + arbolGeneral.contarHojas(arbolGeneral.getRaiz()));
                         System.out.println("Altura BST: " + bst.altura());
                         System.out.println("Altura AVL: " + avl.altura());
+                        System.out.println("Raiz AVL: " + (avl.estaVacio() ? "-" : avl.getRaiz().registro.getId()));
+                        List<Registro> inBst = new ArrayList<>();
+                        bst.inorden(bst.raiz, inBst);
+                        List<Registro> inAvl = new ArrayList<>();
+                        avl.inorden(avl.getRaiz(), inAvl);
+                        System.out.println("Inorden BST: " + registrosToString(inBst));
+                        System.out.println("Inorden AVL: " + registrosToString(inAvl));
+                        System.out.println("AVL balanceado: " + avl.estaBalanceado());
                         System.out.println("Pendientes: " + obtenerPendientes(arbolGeneral).size());
                         break;
 
@@ -167,6 +193,12 @@ public class Main
     private static void reconstruirHeap(ArbolGeneral arbol, BinaryHeap heap) {
         List<Registro> pendientes = obtenerPendientes(arbol);
         heap.buildHeap(pendientes);
+    }
+
+    private static String registrosToString(List<Registro> lista) {
+        List<Integer> ids = new ArrayList<>();
+        for (Registro r : lista) ids.add(r.getId());
+        return listToString(ids);
     }
 
     private static String listToString(List<Integer> lista) {

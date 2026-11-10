@@ -2,8 +2,8 @@ public class Registro
 {
     private int id;
     private String nombre;
-    private int prioridad; // 1 a 10 (10 es más urgente)[cite: 3]
-    private int padre;     // 0 indica raíz[cite: 3]
+    private int prioridad; // 1 a 10 (10 es más urgente)
+    private int padre;     // 0 indica raíz
     private String estado; // "PENDIENTE", "ATENDIDO", "CANCELADO"
 
     public Registro(int id, String nombre, int prioridad, int padre) {

@@ -77,7 +77,7 @@ public class ArbolGeneral
     }
 
     // --- Altura y Hojas ---
-    // Altura = número de aristas del camino más largo hasta una hoja; nodo sin hijos tiene altura 0[cite: 3, 4].
+    // Altura = número de aristas del camino más largo hasta una hoja; nodo sin hijos tiene altura 0.
     public int calcularAltura(NodoGeneral nodo) {
         if (nodo == null || nodo.hijos.isEmpty()) {
             return 0;
@@ -109,7 +109,7 @@ public class ArbolGeneral
 
     private int cancelarRecursivo(NodoGeneral nodo) {
         int count = 0;
-        // Solo cancela si está pendiente (los atendidos conservan su estado)[cite: 4]
+        // Solo cancela si está pendiente (los atendidos conservan su estado)
         if ("PENDIENTE".equals(nodo.registro.getEstado())) {
             nodo.registro.setEstado("CANCELADO");
             count++;

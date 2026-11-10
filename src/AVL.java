@@ -11,7 +11,7 @@ public class AVL {
             this.registro = registro;
             this.left = null;
             this.right = null;
-            this.height = 0; // Hoja tiene altura 0 según convención[cite: 4]
+            this.height = 0; // Hoja tiene altura 0 según convención
         }
     }
 
@@ -31,12 +31,12 @@ public class AVL {
 
     // --- Altura auxiliar ---
     private int height(NodoAVL nodo) {
-        return (nodo == null) ? -1 : nodo.height; // Árbol vacío = -1[cite: 4]
+        return (nodo == null) ? -1 : nodo.height; // Árbol vacío = -1
     }
 
     private int getBalance(NodoAVL nodo) {
         if (nodo == null) return 0;
-        return height(nodo.left) - height(nodo.right); // Altura izquierda - altura derecha[cite: 10]
+        return height(nodo.left) - height(nodo.right); // Altura izquierda - altura derecha
     }
 
     private void actualizarAltura(NodoAVL nodo) {
@@ -95,7 +95,7 @@ public class AVL {
         } else if (registro.getId() > actual.registro.getId()) {
             actual.right = insertarRecursivo(actual.right, registro);
         } else {
-            return actual; // No se admiten claves repetidas[cite: 4]
+            return actual; // No se admiten claves repetidas
         }
 
         // 2. Actualizar altura del nodo actual
@@ -221,5 +221,17 @@ public class AVL {
             actual = actual.left;
         }
         return actual;
+    }
+
+    // Comprueba que cada nodo tenga factor de balance en [-1, 1] y alturas consistentes
+    public boolean estaBalanceado() {
+        return verificarBalance(raiz);
+    }
+
+    private boolean verificarBalance(NodoAVL nodo) {
+        if (nodo == null) return true;
+        if (Math.abs(getBalance(nodo)) > 1) return false;
+        if (nodo.height != 1 + Math.max(height(nodo.left), height(nodo.right))) return false;
+        return verificarBalance(nodo.left) && verificarBalance(nodo.right);
     }
 }

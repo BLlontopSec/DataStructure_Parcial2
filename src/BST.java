@@ -54,7 +54,7 @@ public class BST {
         }
     }
 
-    // Árbol vacío = altura -1; hoja = altura 0[cite: 4].
+    // Árbol vacío = altura -1; hoja = altura 0.
     public int altura() { return calcularAltura(raiz);}
 
     protected int calcularAltura(NodoBST nodo) {

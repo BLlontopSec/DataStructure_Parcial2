@@ -1,0 +1,301 @@
+PRUEBAS - Examen 02 - Estructuras de Datos (2026-2)
+Equipo 7: Adrien Roho, Bryan Llontop, Diego Castillo
+Contexto: I.2 Simulacion de particulas (cada registro es una tarea de analisis de una particula).
+
+Como se ejecutaron:
+  javac -encoding UTF-8 -d out src/*.java
+  java -cp out Main < pruebas/CasoX.txt   (un archivo de entrada por caso, en la carpeta pruebas/)
+
+Convenciones: altura = numero de aristas (arbol vacio = -1, hoja = 0).
+Desempate de prioridades: mayor prioridad primero; si empatan, menor ID.
+Los casos D, E y F se ejecutan con los mismos comandos (REGISTRAR, ESTADISTICAS, ELIMINAR, REPORTE,
+SIGUIENTE). ESTADISTICAS muestra ademas la raiz del AVL, los inordenes de BST/AVL y si el AVL esta balanceado.
+En los casos D, E y F solo importan las claves/prioridades; los demas campos son relleno.
+
+==========================================================================
+CASO A. Integracion completa
+==========================================================================
+ENTRADA (pruebas/CasoA.txt):
+  REGISTRAR 10 A 2 0
+  REGISTRAR 20 B 5 10
+  REGISTRAR 30 C 3 10
+  CONSULTAR 20
+  SIGUIENTE
+  CANCELAR 10
+  REPORTE
+  ESTADISTICAS
+SALIDA OBTENIDA:
+  OK: registro 10
+  OK: registro 20
+  OK: registro 30
+  ID=20 NOMBRE B PRIORIDAD=5 PADRE 10 ESTADO PENDIENTE
+  ATENDIDO: 20 (B)
+  CANCELADOS: 2
+  
+  Preorden: 10,20,30
+  Postorden: 20,30,10
+  Por niveles: 10,20,30
+  Altura arbol general: 1
+  Hojas: 2
+  Altura BST: 2
+  Altura AVL: 1
+  Raiz AVL: 20
+  Inorden BST: 10,20,30
+  Inorden AVL: 10,20,30
+  AVL balanceado: true
+  Pendientes: 0
+CONCLUSION: Coincide con lo esperado. CONSULTAR 20 muestra B (ID 20, prioridad 5, PENDIENTE); SIGUIENTE
+atiende B (20); CANCELAR 10 cancela A y C (2 pendientes) y B conserva su estado ATENDIDO; REPORTE queda
+vacio; pendientes = 0. El arbol general conserva los 3 nodos: preorden 10,20,30, postorden 20,30,10,
+por niveles 10,20,30, altura 1 y 2 hojas.
+
+==========================================================================
+CASO B. Empates de prioridad
+==========================================================================
+ENTRADA (pruebas/CasoB.txt):
+  REGISTRAR 50 A 7 0
+  REGISTRAR 30 B 7 50
+  REGISTRAR 40 C 9 50
+  REPORTE
+  SIGUIENTE
+  SIGUIENTE
+SALIDA OBTENIDA:
+  OK: registro 50
+  OK: registro 30
+  OK: registro 40
+  40(9) 30(7) 50(7) 
+  ATENDIDO: 40 (C)
+  ATENDIDO: 30 (B)
+CONCLUSION: Coincide con lo esperado. El reporte es 40,30,50 (40 tiene prioridad 9; 30 y 50 empatan en 7 y
+gana el menor ID). El primer atendido es 40 y el segundo es 30.
+
+==========================================================================
+CASO C. Errores de registro
+==========================================================================
+ENTRADA (pruebas/CasoC.txt):
+  REGISTRAR 10 A 2 0
+  REGISTRAR 10 B 3 10
+  REGISTRAR 40 C 5 99
+  ESTADISTICAS
+SALIDA OBTENIDA:
+  OK: registro 10
+  ERROR: ID duplicado (10)
+  ERROR: el padre 99 no existe
+  Preorden: 10
+  Postorden: 10
+  Por niveles: 10
+  Altura arbol general: 0
+  Hojas: 1
+  Altura BST: 0
+  Altura AVL: 0
+  Raiz AVL: 10
+  Inorden BST: 10
+  Inorden AVL: 10
+  AVL balanceado: true
+  Pendientes: 1
+CONCLUSION: Coincide con lo esperado. Se acepta el primer registro, se rechaza el segundo por ID duplicado
+y el tercero porque el padre 99 no existe. Queda un solo registro (1 pendiente, preorden 10).
+
+==========================================================================
+CASO D. Rotaciones AVL (cuatro pruebas independientes, estructuras nuevas en cada una)
+==========================================================================
+--- Caso D-LL (inserciones en AVL vacio: 30, 20, 10) ---
+ENTRADA (pruebas/CasoD_LL.txt):
+  REGISTRAR 30 A 5 0
+  REGISTRAR 20 B 5 30
+  REGISTRAR 10 C 5 30
+  ESTADISTICAS
+SALIDA OBTENIDA:
+  OK: registro 30
+  OK: registro 20
+  OK: registro 10
+  Preorden: 30,20,10
+  Postorden: 20,10,30
+  Por niveles: 30,20,10
+  Altura arbol general: 1
+  Hojas: 2
+  Altura BST: 2
+  Altura AVL: 1
+  Raiz AVL: 20
+  Inorden BST: 10,20,30
+  Inorden AVL: 10,20,30
+  AVL balanceado: true
+  Pendientes: 3
+CONCLUSION: Coincide con lo esperado. Raiz final del AVL = 20, inorden 10,20,30, altura 1 y arbol
+balanceado. Rotacion realizada: rotacion simple a la derecha (LL) sobre el 30.
+Nota: el BST (sin balanceo) queda con altura 2, el AVL con altura 1.
+
+--- Caso D-RR (inserciones en AVL vacio: 10, 20, 30) ---
+ENTRADA (pruebas/CasoD_RR.txt):
+  REGISTRAR 10 A 5 0
+  REGISTRAR 20 B 5 10
+  REGISTRAR 30 C 5 10
+  ESTADISTICAS
+SALIDA OBTENIDA:
+  OK: registro 10
+  OK: registro 20
+  OK: registro 30
+  Preorden: 10,20,30
+  Postorden: 20,30,10
+  Por niveles: 10,20,30
+  Altura arbol general: 1
+  Hojas: 2
+  Altura BST: 2
+  Altura AVL: 1
+  Raiz AVL: 20
+  Inorden BST: 10,20,30
+  Inorden AVL: 10,20,30
+  AVL balanceado: true
+  Pendientes: 3
+CONCLUSION: Coincide con lo esperado. Raiz final del AVL = 20, inorden 10,20,30, altura 1 y arbol
+balanceado. Rotacion realizada: rotacion simple a la izquierda (RR) sobre el 10.
+Nota: el BST (sin balanceo) queda con altura 2, el AVL con altura 1.
+
+--- Caso D-LR (inserciones en AVL vacio: 30, 10, 20) ---
+ENTRADA (pruebas/CasoD_LR.txt):
+  REGISTRAR 30 A 5 0
+  REGISTRAR 10 B 5 30
+  REGISTRAR 20 C 5 30
+  ESTADISTICAS
+SALIDA OBTENIDA:
+  OK: registro 30
+  OK: registro 10
+  OK: registro 20
+  Preorden: 30,10,20
+  Postorden: 10,20,30
+  Por niveles: 30,10,20
+  Altura arbol general: 1
+  Hojas: 2
+  Altura BST: 2
+  Altura AVL: 1
+  Raiz AVL: 20
+  Inorden BST: 10,20,30
+  Inorden AVL: 10,20,30
+  AVL balanceado: true
+  Pendientes: 3
+CONCLUSION: Coincide con lo esperado. Raiz final del AVL = 20, inorden 10,20,30, altura 1 y arbol
+balanceado. Rotacion realizada: rotacion doble LR: izquierda sobre el 10 y luego derecha sobre el 30.
+Nota: el BST (sin balanceo) queda con altura 2, el AVL con altura 1.
+
+--- Caso D-RL (inserciones en AVL vacio: 10, 30, 20) ---
+ENTRADA (pruebas/CasoD_RL.txt):
+  REGISTRAR 10 A 5 0
+  REGISTRAR 30 B 5 10
+  REGISTRAR 20 C 5 10
+  ESTADISTICAS
+SALIDA OBTENIDA:
+  OK: registro 10
+  OK: registro 30
+  OK: registro 20
+  Preorden: 10,30,20
+  Postorden: 30,20,10
+  Por niveles: 10,30,20
+  Altura arbol general: 1
+  Hojas: 2
+  Altura BST: 2
+  Altura AVL: 1
+  Raiz AVL: 20
+  Inorden BST: 10,20,30
+  Inorden AVL: 10,20,30
+  AVL balanceado: true
+  Pendientes: 3
+CONCLUSION: Coincide con lo esperado. Raiz final del AVL = 20, inorden 10,20,30, altura 1 y arbol
+balanceado. Rotacion realizada: rotacion doble RL: derecha sobre el 30 y luego izquierda sobre el 10.
+Nota: el BST (sin balanceo) queda con altura 2, el AVL con altura 1.
+
+==========================================================================
+CASO E. BST frente a AVL (claves 1..7 y luego eliminar la clave 4)
+==========================================================================
+ENTRADA (pruebas/CasoE.txt):
+  REGISTRAR 1 N1 5 0
+  REGISTRAR 2 N2 5 1
+  REGISTRAR 3 N3 5 2
+  REGISTRAR 4 N4 5 3
+  REGISTRAR 5 N5 5 4
+  REGISTRAR 6 N6 5 5
+  REGISTRAR 7 N7 5 6
+  ESTADISTICAS
+  ELIMINAR 4
+  ESTADISTICAS
+SALIDA OBTENIDA:
+  OK: registro 1
+  OK: registro 2
+  OK: registro 3
+  OK: registro 4
+  OK: registro 5
+  OK: registro 6
+  OK: registro 7
+  Preorden: 1,2,3,4,5,6,7
+  Postorden: 7,6,5,4,3,2,1
+  Por niveles: 1,2,3,4,5,6,7
+  Altura arbol general: 6
+  Hojas: 1
+  Altura BST: 6
+  Altura AVL: 2
+  Raiz AVL: 4
+  Inorden BST: 1,2,3,4,5,6,7
+  Inorden AVL: 1,2,3,4,5,6,7
+  AVL balanceado: true
+  Pendientes: 7
+  ELIMINADO de BST y AVL: 4 (BST lo encuentra: false, AVL lo encuentra: false)
+  Preorden: 1,2,3,4,5,6,7
+  Postorden: 7,6,5,4,3,2,1
+  Por niveles: 1,2,3,4,5,6,7
+  Altura arbol general: 6
+  Hojas: 1
+  Altura BST: 5
+  Altura AVL: 2
+  Raiz AVL: 5
+  Inorden BST: 1,2,3,5,6,7
+  Inorden AVL: 1,2,3,5,6,7
+  AVL balanceado: true
+  Pendientes: 7
+CONCLUSION: Coincide con lo esperado. Con 1..7 el BST tiene altura 6 y el AVL altura 2; ambos tienen
+inorden 1,2,3,4,5,6,7. Tras ELIMINAR 4 de ambos, la clave 4 ya no se encuentra (BST: false, AVL: false) ni
+aparece en el inorden (1,2,3,5,6,7) y el AVL sigue balanceado (altura 2, raiz 5). Para eliminar un nodo con
+dos hijos se usa el sucesor (menor clave del subarbol derecho). El BST queda con altura 5.
+Nota: ELIMINAR actua solo sobre BST y AVL (regla f: borrado explicito en las pruebas de estructuras); el
+arbol general y el heap no se tocan.
+
+==========================================================================
+CASO F. Heap y Heap-Sort
+==========================================================================
+Prioridades [4,10,3,5,1,8,9,2] con IDs 1..8 (se registran en ese orden).
+ENTRADA (pruebas/CasoF.txt):
+  # Prioridades [4,10,3,5,1,8,9,2] con IDs 1..8
+  REGISTRAR 1 P1 4 0
+  REGISTRAR 2 P2 10 1
+  REGISTRAR 3 P3 3 1
+  REGISTRAR 4 P4 5 1
+  REGISTRAR 5 P5 1 1
+  REGISTRAR 6 P6 8 1
+  REGISTRAR 7 P7 9 1
+  REGISTRAR 8 P8 2 1
+  REPORTE
+  SIGUIENTE
+  SIGUIENTE
+SALIDA OBTENIDA:
+  OK: registro 1
+  OK: registro 2
+  OK: registro 3
+  OK: registro 4
+  OK: registro 5
+  OK: registro 6
+  OK: registro 7
+  OK: registro 8
+  2(10) 7(9) 6(8) 4(5) 1(4) 3(3) 8(2) 5(1) 
+  ATENDIDO: 2 (P2)
+  ATENDIDO: 7 (P7)
+CONCLUSION: Coincide con lo esperado. La raiz del heap es la de prioridad 10 (ID 2) y al extraerla la
+siguiente raiz es la de prioridad 9 (ID 7). REPORTE (Heap-Sort sobre una copia) lista 10,9,8,5,4,3,2,1 en
+orden de atencion, es decir, el ascendente [1,2,3,4,5,8,9,10] leido al reves.
+Verificacion adicional (programa auxiliar fuera de la entrega): buildHeap sobre [4,10,3,5,1,8,9,2] da raiz
+10 y luego 9, y HeapSort.ordenar produce [1,2,3,4,5,8,9,10] en orden ascendente sin modificar la lista
+original.
+
+==========================================================================
+PRUEBAS ADICIONALES
+==========================================================================
+- Prueba de estres con 5000 inserciones/eliminaciones aleatorias en AVL y BST: el AVL se mantuvo balanceado
+  en cada paso y los inordenes coinciden con el conjunto esperado.
+- Claves 1..1000 insertadas en orden: altura BST = 999, altura AVL = 9.
